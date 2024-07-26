@@ -2,17 +2,27 @@ package repositories
 
 import (
 	"context"
+	"fmt"
 	"main/database"
 	"main/database/arango"
 	"main/schemas/domain/models"
 )
 
-type ArangodbSchemasRepository struct{
+type ArangodbSchemasRepository struct {
 	DbHandler *database.DbHandler[arango.DriverDatabase, arango.DriverClient]
 }
 
 func (asr *ArangodbSchemasRepository) GetById(id string) (*models.Schema, error) {
-	asr.DbHandler.Client.Database(context.Background(), id)
+	database, err := asr.DbHandler.Client.Database(context.Background(), id)
+	if err != nil {
+		return nil, err
+	}
+
+	info, err := database.Info(context.Background())
+	if err != nil {
+		return nil, err
+	}
+	fmt.Println(info.ID)
 
 	schema := &models.Schema{
 		Id: id,

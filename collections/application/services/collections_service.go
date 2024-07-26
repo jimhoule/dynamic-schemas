@@ -7,9 +7,9 @@ import (
 	"main/collections/domain/models"
 )
 
-type CollectionsService struct{
-	CollectionsFactory *factories.CollectionsFactory
-	PropertiesFactory *factories.PropertiesFactory
+type CollectionsService struct {
+	CollectionsFactory    *factories.CollectionsFactory
+	PropertiesFactory     *factories.PropertiesFactory
 	CollectionsRepository ports.CollectionsRepositoryPort
 }
 
@@ -22,14 +22,15 @@ func (cs *CollectionsService) GetByName(schemaId string, name string) (*models.C
 }
 
 func (cs *CollectionsService) Create(createCollectionPayload *payloads.CreateCollectionPayload) (*models.Collection, error) {
-	properties := map[string]*models.Property{}
+	properties := []*models.Property{}
 	for _, createPropertyPayload := range createCollectionPayload.CreatePropertyPayloads {
 		property := cs.PropertiesFactory.Create(
+			createCollectionPayload.Name,
 			createPropertyPayload.IsRequired,
 			createPropertyPayload.Type,
 		)
 
-		properties[createPropertyPayload.Name] = property
+		properties = append(properties, property)
 	}
 
 	collection := cs.CollectionsFactory.Create(createCollectionPayload.Name, properties)

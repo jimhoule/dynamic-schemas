@@ -4,9 +4,10 @@ import "main/collections/domain/models"
 
 type PropertiesFactory struct{}
 
-func (*PropertiesFactory) Create(isRequired bool, propertyType string) *models.Property {
+func (*PropertiesFactory) Create(name string, isRequired bool, propertyType string) *models.Property {
 	return &models.Property{
+		Name:       name,
 		IsRequired: isRequired,
-		Type: propertyType,
+		Type:       propertyType,
 	}
 }

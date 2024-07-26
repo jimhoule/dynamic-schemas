@@ -22,7 +22,7 @@
 .env
 
 # http files
-#**/*.http
+**/*.http
 
 # container volumes
 docker/volumes

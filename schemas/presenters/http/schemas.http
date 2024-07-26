@@ -1,0 +1,12 @@
+### NOTE: To use this file VSC REST Client extension must be installed 
+
+### Gets a Schema by id
+GET http://localhost:5000/schemas/<schemaId>
+
+### Creates a Tenant
+POST http://localhost:5000/schemas
+Content-Type: application/json
+
+{
+    "id": "tenant id"
+}

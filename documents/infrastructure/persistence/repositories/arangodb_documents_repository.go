@@ -2,12 +2,13 @@ package repositories
 
 import (
 	"context"
+	"fmt"
 	"main/database"
 	"main/database/arango"
 	"main/documents/domain/models"
 )
 
-type ArangodbDocumentsRepository struct{
+type ArangodbDocumentsRepository struct {
 	DbHandler *database.DbHandler[arango.DriverDatabase, arango.DriverClient]
 }
 
@@ -17,10 +18,11 @@ func (adr *ArangodbDocumentsRepository) GetAll(schemaId string, collectionName s
 		return nil, err
 	}
 
-	query := "FOR document in @collection return { key: document._key, body: document.body }"
-	bindVars := map[string]any{
-		"collection": collectionName,
-	}
+	query := fmt.Sprintf(
+		"FOR document IN %s RETURN { key: document._key, body: document.body }",
+		collectionName,
+	)
+	bindVars := map[string]any{}
 
 	cursor, err := database.Query(context.Background(), query, bindVars)
 	if err != nil {
@@ -49,9 +51,11 @@ func (adr *ArangodbDocumentsRepository) GetByKey(schemaId string, collectionName
 		return nil, err
 	}
 
-	query := "FOR document in @collection FILTER document._key == @key return { key: document._key, body: document.body }"
+	query := fmt.Sprintf(
+		"FOR document IN %s FILTER document._key == @key RETURN { key: document._key, body: document.body }",
+		collectionName,
+	)
 	bindVars := map[string]any{
-		"collection": collectionName,
 		"key": key,
 	}
 
@@ -63,11 +67,10 @@ func (adr *ArangodbDocumentsRepository) GetByKey(schemaId string, collectionName
 
 	document := &models.Document{}
 
-		_, err = cursor.ReadDocument(context.Background(), &document)
-		if err != nil {
-			return nil, err
-		}
-
+	_, err = cursor.ReadDocument(context.Background(), &document)
+	if err != nil {
+		return nil, err
+	}
 
 	return document, nil
 }
@@ -78,10 +81,9 @@ func (adr *ArangodbDocumentsRepository) Create(schemaId string, collectionName s
 		return nil, err
 	}
 
-	query := "INSERT { _key: @key, body: @body } INTO @collection"
+	query := fmt.Sprintf("INSERT { _key: @key, body: @body } INTO %s", collectionName)
 	bindVars := map[string]any{
-		"collection": collectionName,
-		"key": document.Key,
+		"key":  document.Key,
 		"body": document.Body,
 	}
 
@@ -89,6 +91,6 @@ func (adr *ArangodbDocumentsRepository) Create(schemaId string, collectionName s
 	if err != nil {
 		return nil, err
 	}
-	
+
 	return document, nil
 }

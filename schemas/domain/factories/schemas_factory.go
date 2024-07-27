@@ -6,8 +6,8 @@ import (
 
 type SchemasFactory struct{}
 
-func (*SchemasFactory) Create(id string) *models.Schema {
+func (*SchemasFactory) Create(name string) *models.Schema {
 	return &models.Schema{
-		Id: id,
+		Name: name,
 	}
 }

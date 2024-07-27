@@ -12,8 +12,8 @@ type ArangodbSchemasRepository struct {
 	DbHandler *database.DbHandler[arango.DriverDatabase, arango.DriverClient]
 }
 
-func (asr *ArangodbSchemasRepository) GetById(id string) (*models.Schema, error) {
-	database, err := asr.DbHandler.Client.Database(context.Background(), id)
+func (asr *ArangodbSchemasRepository) GetByName(name string) (*models.Schema, error) {
+	database, err := asr.DbHandler.Client.Database(context.Background(), name)
 	if err != nil {
 		return nil, err
 	}
@@ -25,7 +25,8 @@ func (asr *ArangodbSchemasRepository) GetById(id string) (*models.Schema, error)
 	fmt.Println(info.ID)
 
 	schema := &models.Schema{
-		Id: id,
+		Id:   info.ID,
+		Name: name,
 	}
 
 	return schema, nil

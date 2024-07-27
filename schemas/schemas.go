@@ -24,6 +24,6 @@ func Init(mainRouter *router.MainRouter, dbHandler *database.DbHandler[arango.Dr
 		SchemasService: GetService(dbHandler),
 	}
 
-	mainRouter.Get("/schemas/{id}", schemasController.GetById)
+	mainRouter.Get("/schemas/{name}", schemasController.GetByName)
 	mainRouter.Post("/schemas", schemasController.Create)
 }

@@ -13,10 +13,10 @@ type SchemasController struct {
 	SchemasService *services.SchemasService
 }
 
-func (sc *SchemasController) GetById(writer http.ResponseWriter, request *http.Request) {
-	id := router.GetUrlParam(request, "id")
+func (sc *SchemasController) GetByName(writer http.ResponseWriter, request *http.Request) {
+	name := router.GetUrlParam(request, "name")
 
-	schema, err := sc.SchemasService.GetById(id)
+	schema, err := sc.SchemasService.GetByName(name)
 	if err != nil {
 		utils.WriteHttpError(writer, http.StatusInternalServerError, err)
 		return
@@ -34,7 +34,7 @@ func (sc *SchemasController) Create(writer http.ResponseWriter, request *http.Re
 	}
 
 	schema, err := sc.SchemasService.Create(&payloads.CreateSchemaPayload{
-		Id: createSchemaDto.Id,
+		Name: createSchemaDto.Name,
 	})
 	if err != nil {
 		utils.WriteHttpError(writer, http.StatusInternalServerError, err)

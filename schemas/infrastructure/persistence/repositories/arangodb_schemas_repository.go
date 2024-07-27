@@ -33,7 +33,7 @@ func (asr *ArangodbSchemasRepository) GetByName(name string) (*models.Schema, er
 }
 
 func (asr *ArangodbSchemasRepository) Create(schema *models.Schema) (*models.Schema, error) {
-	_, err := asr.DbHandler.Client.CreateDatabase(context.Background(), schema.Id, nil)
+	_, err := asr.DbHandler.Client.CreateDatabase(context.Background(), schema.Name, nil)
 	if err != nil {
 		return nil, err
 	}

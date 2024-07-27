@@ -147,6 +147,7 @@ func mapPropertiesToModels(arangoProperties arango.Properties) []*models.Propert
 	properties := []*models.Property{}
 	for key, arangoProperty := range arangoProperties.Rule.Properties {
 		property := &models.Property{
+			Name:       key,
 			Type:       arangoProperty.Type,
 			IsRequired: false,
 		}

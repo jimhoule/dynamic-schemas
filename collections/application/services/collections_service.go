@@ -25,7 +25,7 @@ func (cs *CollectionsService) Create(createCollectionPayload *payloads.CreateCol
 	properties := []*models.Property{}
 	for _, createPropertyPayload := range createCollectionPayload.CreatePropertyPayloads {
 		property := cs.PropertiesFactory.Create(
-			createCollectionPayload.Name,
+			createPropertyPayload.Name,
 			createPropertyPayload.IsRequired,
 			createPropertyPayload.Type,
 		)

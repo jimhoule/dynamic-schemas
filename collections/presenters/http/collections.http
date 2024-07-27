@@ -1,23 +1,28 @@
 ### NOTE: To use this file VSC REST Client extension must be installed 
 
 ### Gets all Collections
-GET http://localhost:5000/collections/<schemaId>
+GET http://localhost:5000/collections/<schemaName>
 
 ### Gets a Collection by name
-GET http://localhost:5000/collections/<schemaId>/<collectionName>
+GET http://localhost:5000/collections/<schemaName>/<collectionName>
 
 ### Creates a Collection
 POST http://localhost:5000/collections
 Content-Type: application/json
 
 {
-    "name": "collection name",
-    "schemaId": "schemaID",
+    "name": "name",
+    "schemaName": "schemaName",
     "createPropertyPayloads": [
         {
-            "name": "property name",
-            "type": "property type",
+            "name": "name",
+            "type": "type",
             "isRequired": true
+        },
+        {
+            "name": "name",
+            "type": "type",
+            "isRequired": false
         }
     ]
 }

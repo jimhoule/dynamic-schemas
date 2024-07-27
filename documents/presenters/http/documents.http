@@ -1,19 +1,19 @@
 ### NOTE: To use this file VSC REST Client extension must be installed 
 
 ### Gets all Documents
-GET http://localhost:5000/documents/<schemaId>/<collectionName>
+GET http://localhost:5000/documents/<schemaName>/<collectionName>
 
 ### Gets a Document by key
-GET http://localhost:5000/documents/<schemaId>/<collectionName>/<key>
+GET http://localhost:5000/documents/<schemaName>/<collectionName>/<key>
 
 ### Creates a Document
 POST http://localhost:5000/documents
 Content-Type: application/json
 
 {
-    "schemaId": "schemaId",
+    "schemaName": "schemaName",
     "collectionName": "collectionName",
     "body": {
-        "propertyKey": "propertyValue"
+        "propertyName": "propertyValue"
     }
 }

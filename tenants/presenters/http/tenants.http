@@ -1,8 +1,5 @@
 ### NOTE: To use this file VSC REST Client extension must be installed 
 
-### Gets all Tenants
-GET http://localhost:5000/tenants
-
 ### Gets a Tenant by id
 GET http://localhost:5000/tenants/<tenantId>
 
@@ -11,16 +8,5 @@ POST http://localhost:5000/tenants
 Content-Type: application/json
 
 {
-    "name": "name",
+    "name": "name"
 }
-
-### Updates a Tenant
-PUT http://localhost:5000/tenants/<tenantId>
-Content-Type: application/json
-
-{
-    "name": "name",
-}
-
-### Deletes a Tenant
-DELETE http://localhost:5000/tenants/<tenantId>

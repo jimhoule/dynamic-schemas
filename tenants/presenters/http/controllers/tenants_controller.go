@@ -1,6 +1,9 @@
 package controllers
 
 import (
+	"encoding/json"
+	"main/queue"
+	"main/queue/topics"
 	"main/router"
 	"main/router/utils"
 	"main/tenants/application/payloads"
@@ -10,7 +13,8 @@ import (
 )
 
 type TenantsController struct {
-	TenantsService *services.TenantsService
+	TenantsService       *services.TenantsService
+	QueueProducerHandler *queue.ProducerHandler
 }
 
 func (ts *TenantsController) GetById(writer http.ResponseWriter, request *http.Request) {
@@ -42,4 +46,8 @@ func (ts *TenantsController) Create(writer http.ResponseWriter, request *http.Re
 	}
 
 	utils.WriteHttpResponse(writer, http.StatusOK, tenant)
+
+	// Sends message to queue for schema creation
+	encodedTenant, _ := json.Marshal(tenant)
+	ts.QueueProducerHandler.SendMessage(topics.TenantCreated, encodedTenant)
 }

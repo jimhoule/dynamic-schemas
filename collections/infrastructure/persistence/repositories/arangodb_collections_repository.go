@@ -14,8 +14,8 @@ type ArangodbCollectionsRepository struct {
 	DbHandler *database.DbHandler[arango.DriverDatabase, arango.DriverClient]
 }
 
-func (acr *ArangodbCollectionsRepository) GetAll(schemaId string) ([]*models.Collection, error) {
-	database, err := acr.DbHandler.Client.Database(context.Background(), schemaId)
+func (acr *ArangodbCollectionsRepository) GetAll(schemaName string) ([]*models.Collection, error) {
+	database, err := acr.DbHandler.Client.Database(context.Background(), schemaName)
 	if err != nil {
 		return nil, err
 	}
@@ -55,8 +55,8 @@ func (acr *ArangodbCollectionsRepository) GetAll(schemaId string) ([]*models.Col
 	return collections, nil
 }
 
-func (acr *ArangodbCollectionsRepository) GetByName(schemaId string, name string) (*models.Collection, error) {
-	database, err := acr.DbHandler.Client.Database(context.Background(), schemaId)
+func (acr *ArangodbCollectionsRepository) GetByName(schemaName string, name string) (*models.Collection, error) {
+	database, err := acr.DbHandler.Client.Database(context.Background(), schemaName)
 	if err != nil {
 		return nil, err
 	}
@@ -82,8 +82,8 @@ func (acr *ArangodbCollectionsRepository) GetByName(schemaId string, name string
 	return collection, nil
 }
 
-func (acr *ArangodbCollectionsRepository) Create(schemaId string, collection *models.Collection) (*models.Collection, error) {
-	database, err := acr.DbHandler.Client.Database(context.Background(), schemaId)
+func (acr *ArangodbCollectionsRepository) Create(schemaName string, collection *models.Collection) (*models.Collection, error) {
+	database, err := acr.DbHandler.Client.Database(context.Background(), schemaName)
 	if err != nil {
 		return nil, err
 	}

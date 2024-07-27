@@ -2,6 +2,6 @@ package payloads
 
 type CreateCollectionPayload struct {
 	Name                   string                   `json:"name"`
-	SchemaId               string                   `json:"schemaId"`
+	SchemaName             string                   `json:"schemaName"`
 	CreatePropertyPayloads []*CreatePropertyPayload `json:"createPropertyPayloads"`
 }

@@ -13,7 +13,7 @@ import (
 func GetService(dbHandler *database.DbHandler[arango.DriverDatabase, arango.DriverClient]) *services.CollectionsService {
 	return &services.CollectionsService{
 		CollectionsFactory: &factories.CollectionsFactory{},
-		PropertiesFactory: &factories.PropertiesFactory{},
+		PropertiesFactory:  &factories.PropertiesFactory{},
 		CollectionsRepository: &repositories.ArangodbCollectionsRepository{
 			DbHandler: dbHandler,
 		},
@@ -25,7 +25,7 @@ func Init(mainRouter *router.MainRouter, dbHandler *database.DbHandler[arango.Dr
 		CollectionsService: GetService(dbHandler),
 	}
 
-	mainRouter.Get("/collections/{schemaId}", collectionsController.GetAll)
-	mainRouter.Get("/collections/{schemaId}/{name}", collectionsController.GetByName)
+	mainRouter.Get("/collections/{schemaName}", collectionsController.GetAll)
+	mainRouter.Get("/collections/{schemaName}/{name}", collectionsController.GetByName)
 	mainRouter.Post("/collections", collectionsController.Create)
 }

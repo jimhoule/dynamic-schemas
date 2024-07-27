@@ -13,12 +13,12 @@ type CollectionsService struct {
 	CollectionsRepository ports.CollectionsRepositoryPort
 }
 
-func (cs *CollectionsService) GetAll(schemaId string) ([]*models.Collection, error) {
-	return cs.CollectionsRepository.GetAll(schemaId)
+func (cs *CollectionsService) GetAll(schemaName string) ([]*models.Collection, error) {
+	return cs.CollectionsRepository.GetAll(schemaName)
 }
 
-func (cs *CollectionsService) GetByName(schemaId string, name string) (*models.Collection, error) {
-	return cs.CollectionsRepository.GetByName(schemaId, name)
+func (cs *CollectionsService) GetByName(schemaName string, name string) (*models.Collection, error) {
+	return cs.CollectionsRepository.GetByName(schemaName, name)
 }
 
 func (cs *CollectionsService) Create(createCollectionPayload *payloads.CreateCollectionPayload) (*models.Collection, error) {
@@ -35,5 +35,5 @@ func (cs *CollectionsService) Create(createCollectionPayload *payloads.CreateCol
 
 	collection := cs.CollectionsFactory.Create(createCollectionPayload.Name, properties)
 
-	return cs.CollectionsRepository.Create(createCollectionPayload.SchemaId, collection)
+	return cs.CollectionsRepository.Create(createCollectionPayload.SchemaName, collection)
 }

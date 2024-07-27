@@ -14,9 +14,9 @@ type CollectionsController struct {
 }
 
 func (cc *CollectionsController) GetAll(writer http.ResponseWriter, request *http.Request) {
-	schemaId := router.GetUrlParam(request, "schemaId")
+	schemaName := router.GetUrlParam(request, "schemaName")
 
-	collection, err := cc.CollectionsService.GetAll(schemaId)
+	collection, err := cc.CollectionsService.GetAll(schemaName)
 	if err != nil {
 		utils.WriteHttpError(writer, http.StatusInternalServerError, err)
 		return
@@ -26,10 +26,11 @@ func (cc *CollectionsController) GetAll(writer http.ResponseWriter, request *htt
 }
 
 func (cc *CollectionsController) GetByName(writer http.ResponseWriter, request *http.Request) {
-	schemaId := router.GetUrlParam(request, "schemaId")
+	schemaName := router.GetUrlParam(request, "schemaName")
+
 	name := router.GetUrlParam(request, "name")
 
-	collection, err := cc.CollectionsService.GetByName(schemaId, name)
+	collection, err := cc.CollectionsService.GetByName(schemaName, name)
 	if err != nil {
 		utils.WriteHttpError(writer, http.StatusInternalServerError, err)
 		return
@@ -47,8 +48,8 @@ func (cc *CollectionsController) Create(writer http.ResponseWriter, request *htt
 	}
 
 	collection, err := cc.CollectionsService.Create(&payloads.CreateCollectionPayload{
-		Name: createCollectionDto.Name,
-		SchemaId: createCollectionDto.SchemaId,
+		Name:                   createCollectionDto.Name,
+		SchemaName:             createCollectionDto.SchemaName,
 		CreatePropertyPayloads: createCollectionDto.CreatePropertyPayloads,
 	})
 	if err != nil {

@@ -14,10 +14,10 @@ type DocumentsController struct {
 }
 
 func (dc *DocumentsController) GetAll(writer http.ResponseWriter, request *http.Request) {
-	schemaId := router.GetUrlParam(request, "schemaId")
+	schemaName := router.GetUrlParam(request, "schemaName")
 	collectionName := router.GetUrlParam(request, "collectionName")
 
-	documents, err := dc.DocumentsService.GetAll(schemaId, collectionName)
+	documents, err := dc.DocumentsService.GetAll(schemaName, collectionName)
 	if err != nil {
 		utils.WriteHttpError(writer, http.StatusInternalServerError, err)
 		return
@@ -27,11 +27,11 @@ func (dc *DocumentsController) GetAll(writer http.ResponseWriter, request *http.
 }
 
 func (dc *DocumentsController) GetByKey(writer http.ResponseWriter, request *http.Request) {
-	schemaId := router.GetUrlParam(request, "schemaId")
+	schemaName := router.GetUrlParam(request, "schemaName")
 	collectionName := router.GetUrlParam(request, "collectionName")
 	key := router.GetUrlParam(request, "key")
 
-	document, err := dc.DocumentsService.GetByKey(schemaId, collectionName, key)
+	document, err := dc.DocumentsService.GetByKey(schemaName, collectionName, key)
 	if err != nil {
 		utils.WriteHttpError(writer, http.StatusInternalServerError, err)
 		return
@@ -49,9 +49,9 @@ func (dc *DocumentsController) Create(writer http.ResponseWriter, request *http.
 	}
 
 	document, err := dc.DocumentsService.Create(&payloads.CreateDocumentPayload{
-		SchemaId: createDocumentDto.SchemaId,
+		SchemaName:     createDocumentDto.SchemaName,
 		CollectionName: createDocumentDto.CollectionName,
-		Body: createDocumentDto.Body,
+		Body:           createDocumentDto.Body,
 	})
 	if err != nil {
 		utils.WriteHttpError(writer, http.StatusInternalServerError, err)

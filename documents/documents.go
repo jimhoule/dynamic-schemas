@@ -27,7 +27,7 @@ func Init(mainRouter *router.MainRouter, dbHandler *database.DbHandler[arango.Dr
 		DocumentsService: GetService(dbHandler),
 	}
 
-	mainRouter.Get("/documents/{schemaId}/{collectionName}", documentsController.GetAll)
-	mainRouter.Get("/documents/{schemaId}/{collectionName}/{key}", documentsController.GetByKey)
+	mainRouter.Get("/documents/{schemaName}/{collectionName}", documentsController.GetAll)
+	mainRouter.Get("/documents/{schemaName}/{collectionName}/{key}", documentsController.GetByKey)
 	mainRouter.Post("/documents", documentsController.Create)
 }

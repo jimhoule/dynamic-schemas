@@ -25,7 +25,7 @@ func main() {
 	clientDbHandler := database.NewDbHandler(
 		arango.NewArangoDb(),
 		os.Getenv("CLIENT_DB_NAME"),
-		fmt.Sprintf("%s:%s", os.Getenv("CLIENT_DB_URL"), os.Getenv("CLIENT_DB_PORT")),
+		os.Getenv("CLIENT_DB_ADDRESS"),
 		os.Getenv("CLIENT_DB_USERNAME"),
 		os.Getenv("CLIENT_DB_PASSWORD"),
 	)
@@ -33,11 +33,11 @@ func main() {
 	appDbHandler := database.NewDbHandler(
 		arango.NewArangoDb(),
 		"",
-		fmt.Sprintf("%s:%s", os.Getenv("APP_DB_URL"), os.Getenv("APP_DB_PORT")),
+		os.Getenv("APP_DB_ADDRESS"),
 		os.Getenv("APP_DB_USERNAME"),
 		os.Getenv("APP_DB_PASSWORD"),
 	)
-	
+
 	mainRouter := router.Get()
 
 	tenants.Init(mainRouter, clientDbHandler)
@@ -46,7 +46,7 @@ func main() {
 	documents.Init(mainRouter, appDbHandler)
 
 	server := &http.Server{
-		Addr: fmt.Sprintf("%s:%s", os.Getenv("HTTP_URL"), os.Getenv("HTTP_PORT")),
+		Addr:    fmt.Sprintf("%s:%s", os.Getenv("HTTP_URL"), os.Getenv("HTTP_PORT")),
 		Handler: mainRouter,
 	}
 

@@ -1,7 +1,6 @@
 package schemas
 
 import (
-	"fmt"
 	"log"
 	"main/database"
 	"main/database/arango"
@@ -39,9 +38,7 @@ func Init(mainRouter *router.MainRouter, dbHandler *database.DbHandler[arango.Dr
 
 	// Sets queue consumer group
 	queueConsumerGroupHandler, err := queue.NewConsumerGroupHandler(
-		[]string{
-			fmt.Sprintf("%s:%s", os.Getenv("QUEUE_URL"), os.Getenv("QUEUE_PORT")),
-		},
+		[]string{os.Getenv("QUEUE_ADDRESS")},
 		"schemas_consumer_group",
 	)
 	if err != nil {

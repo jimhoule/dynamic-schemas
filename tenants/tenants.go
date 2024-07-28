@@ -1,7 +1,6 @@
 package tenants
 
 import (
-	"fmt"
 	"log"
 	"main/database"
 	"main/database/arango"
@@ -27,11 +26,7 @@ func GetService(dbHandler *database.DbHandler[arango.DriverDatabase, arango.Driv
 }
 
 func Init(mainRouter *router.MainRouter, dbHandler *database.DbHandler[arango.DriverDatabase, arango.DriverClient]) {
-	queueProducerHandler, err := queue.NewProducerHandler(
-		[]string{
-			fmt.Sprintf("%s:%s", os.Getenv("QUEUE_URL"), os.Getenv("QUEUE_PORT")),
-		},
-	)
+	queueProducerHandler, err := queue.NewProducerHandler([]string{os.Getenv("QUEUE_ADDRESS")})
 	if err != nil {
 		log.Panic(err)
 	}

@@ -1,11 +1,12 @@
 package documents
 
 import (
+	"main/collections"
 	"main/database"
 	"main/database/arango"
 	"main/documents/application/services"
 	"main/documents/domain/factories"
-	"main/documents/infrastructure/persistence/repositories"
+	"main/documents/infrastructure/persistence/arangodb/repositories"
 	"main/documents/presenters/http/controllers"
 	"main/router"
 	"main/uuid"
@@ -19,6 +20,7 @@ func GetService(dbHandler *database.DbHandler[arango.DriverDatabase, arango.Driv
 		DocumentsRepository: &repositories.ArangodbDocumentsRepository{
 			DbHandler: dbHandler,
 		},
+		CollectionsService: collections.GetService(dbHandler),
 	}
 }
 

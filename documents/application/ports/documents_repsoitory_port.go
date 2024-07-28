@@ -1,6 +1,8 @@
 package ports
 
-import "main/documents/domain/models"
+import (
+	"main/documents/domain/models"
+)
 
 type DocumentsRepositoryPort interface {
 	GetAll(schemaName string, collectionName string) ([]*models.Document, error)

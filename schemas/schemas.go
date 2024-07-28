@@ -10,7 +10,7 @@ import (
 	"main/router"
 	"main/schemas/application/services"
 	"main/schemas/domain/factories"
-	"main/schemas/infrastructure/persistence/repositories"
+	"main/schemas/infrastructure/persistence/arangodb/repositories"
 	"main/schemas/presenters/consumer/handlers"
 	"main/schemas/presenters/http/controllers"
 	"os"

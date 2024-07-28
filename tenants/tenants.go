@@ -9,7 +9,7 @@ import (
 	"main/router"
 	"main/tenants/application/services"
 	"main/tenants/domain/factories"
-	"main/tenants/infrastructure/persistence/repositories"
+	"main/tenants/infrastructure/persistence/arangodb/repositories"
 	"main/tenants/presenters/http/controllers"
 	"main/uuid"
 	"os"

@@ -2,16 +2,16 @@ package repositories
 
 import "main/tenants/domain/models"
 
-type FakeTenantsRepository struct{}
+type FakeTenantsRepository struct {
+	Tenants []*models.Tenant
+}
 
-var tenants []*models.Tenant = []*models.Tenant{}
-
-func ResetFakeTenantsRepository() {
-	tenants = []*models.Tenant{}
+func (ftr *FakeTenantsRepository) Reset() {
+	ftr.Tenants = []*models.Tenant{}
 }
 
 func (ftr *FakeTenantsRepository) GetById(id string) (*models.Tenant, error) {
-	for _, tenant := range tenants {
+	for _, tenant := range ftr.Tenants {
 		if tenant.Id == id {
 			return tenant, nil
 		}
@@ -21,7 +21,7 @@ func (ftr *FakeTenantsRepository) GetById(id string) (*models.Tenant, error) {
 }
 
 func (ftr *FakeTenantsRepository) Create(tenant *models.Tenant) (*models.Tenant, error) {
-	tenants = append(tenants, tenant)
+	ftr.Tenants = append(ftr.Tenants, tenant)
 
 	return tenant, nil
 }

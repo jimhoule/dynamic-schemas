@@ -1,17 +1,19 @@
 package repositories
 
 import (
-	"bytes"
 	"context"
 	"encoding/json"
 	"main/collections/domain/models"
+	"main/collections/infrastructure/persistence/arangodb/entities"
+	"main/collections/infrastructure/persistence/arangodb/mappers"
 	"main/database"
 	"main/database/arango"
 	"strings"
 )
 
 type ArangodbCollectionsRepository struct {
-	DbHandler *database.DbHandler[arango.DriverDatabase, arango.DriverClient]
+	DbHandler        *database.DbHandler[arango.DriverDatabase, arango.DriverClient]
+	PropertiesMapper *mappers.PropertiesMapper
 }
 
 func (acr *ArangodbCollectionsRepository) GetAll(schemaName string) ([]*models.Collection, error) {
@@ -41,12 +43,13 @@ func (acr *ArangodbCollectionsRepository) GetAll(schemaName string) ([]*models.C
 			return nil, err
 		}
 
-		var arangoProperties arango.Properties
-		transcode(collectionProperties.Schema.Rule, &arangoProperties)
+		// Parses entity
+		var propertiesEntity entities.Properties
+		acr.PropertiesMapper.ToParsedEntity(collectionProperties.Schema.Rule, &propertiesEntity)
 
 		collection := &models.Collection{
 			Name:       filteredCollection.Name(),
-			Properties: mapPropertiesToModels(arangoProperties),
+			Properties: acr.PropertiesMapper.ToDomainModels(propertiesEntity),
 		}
 
 		collections = append(collections, collection)
@@ -71,12 +74,13 @@ func (acr *ArangodbCollectionsRepository) GetByName(schemaName string, name stri
 		return nil, err
 	}
 
-	var arangoProperties arango.Properties
-	transcode(collectionProperties.Schema.Rule, &arangoProperties)
+	// Parses entity
+	var propertiesEntity entities.Properties
+	acr.PropertiesMapper.ToParsedEntity(collectionProperties.Schema.Rule, &propertiesEntity)
 
 	collection := &models.Collection{
 		Name:       databaseCollection.Name(),
-		Properties: mapPropertiesToModels(arangoProperties),
+		Properties: acr.PropertiesMapper.ToDomainModels(propertiesEntity),
 	}
 
 	return collection, nil
@@ -88,18 +92,18 @@ func (acr *ArangodbCollectionsRepository) Create(schemaName string, collection *
 		return nil, err
 	}
 
-	// Maps all properties to arnago properties model
-	arangoProperties := mapPropertiesToEntities(collection.Properties)
+	// Maps all models to entity
+	propertiesEntity := acr.PropertiesMapper.ToEntity(collection.Properties)
 
-	// Encodes arango properties
-	encodedArangoProperties, err := json.Marshal(arangoProperties)
+	// Encodes entity
+	encodedPropertiesEntity, err := json.Marshal(propertiesEntity)
 	if err != nil {
 		return nil, err
 	}
 
-	// Loads arango properties for creation
+	// Loads entity for creation
 	collectionProperties := arango.CreateCollectionPropertiesOptions{}
-	err = collectionProperties.LoadRule(encodedArangoProperties)
+	err = collectionProperties.LoadRule(encodedPropertiesEntity)
 	if err != nil {
 		return nil, err
 	}
@@ -112,66 +116,4 @@ func (acr *ArangodbCollectionsRepository) Create(schemaName string, collection *
 	}
 
 	return collection, nil
-}
-
-func mapPropertiesToEntities(properties []*models.Property) arango.Properties {
-	arangoProperties := arango.Properties{
-		Rule: arango.Rule{
-			Properties: map[string]arango.Property{},
-			Required:   []string{},
-		},
-		Level: "strict",
-	}
-
-	for _, property := range properties {
-		// If is required
-		if property.IsRequired {
-			arangoProperties.Rule.Required = append(arangoProperties.Rule.Required, property.Name)
-		}
-
-		arangoProperty := arango.Property{
-			Type: property.Type,
-		}
-		// If is of type array, adds type of each item in the array
-		if property.Type == "array" {
-			arangoProperty.Items.Type = property.ItemType
-		}
-
-		arangoProperties.Rule.Properties[property.Name] = arangoProperty
-	}
-
-	return arangoProperties
-}
-
-func mapPropertiesToModels(arangoProperties arango.Properties) []*models.Property {
-	properties := []*models.Property{}
-	for key, arangoProperty := range arangoProperties.Rule.Properties {
-		property := &models.Property{
-			Name:       key,
-			Type:       arangoProperty.Type,
-			IsRequired: false,
-		}
-
-		// If is of type array
-		if arangoProperty.Type == "array" {
-			property.ItemType = arangoProperty.Items.Type
-		}
-
-		// If is required
-		for _, requiredPropertyName := range arangoProperties.Rule.Required {
-			if requiredPropertyName == key {
-				property.IsRequired = true
-			}
-		}
-
-		properties = append(properties, property)
-	}
-
-	return properties
-}
-
-func transcode(in any, out any) {
-	var buffer bytes.Buffer
-	json.NewEncoder(&buffer).Encode(in)
-	json.NewDecoder(&buffer).Decode(out)
 }

@@ -3,7 +3,8 @@ package collections
 import (
 	"main/collections/application/services"
 	"main/collections/domain/factories"
-	"main/collections/infrastructure/persistence/repositories"
+	"main/collections/infrastructure/persistence/arangodb/mappers"
+	"main/collections/infrastructure/persistence/arangodb/repositories"
 	"main/collections/presenters/http/controllers"
 	"main/database"
 	"main/database/arango"
@@ -15,7 +16,8 @@ func GetService(dbHandler *database.DbHandler[arango.DriverDatabase, arango.Driv
 		CollectionsFactory: &factories.CollectionsFactory{},
 		PropertiesFactory:  &factories.PropertiesFactory{},
 		CollectionsRepository: &repositories.ArangodbCollectionsRepository{
-			DbHandler: dbHandler,
+			DbHandler:        dbHandler,
+			PropertiesMapper: &mappers.PropertiesMapper{},
 		},
 	}
 }

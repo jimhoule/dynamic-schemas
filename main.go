@@ -9,6 +9,7 @@ import (
 	"main/documents"
 	"main/router"
 	"main/schemas"
+	"main/swagger"
 	"main/tenants"
 	"net/http"
 	"os"
@@ -44,6 +45,7 @@ func main() {
 	schemas.Init(mainRouter, appDbHandler)
 	collections.Init(mainRouter, appDbHandler)
 	documents.Init(mainRouter, appDbHandler)
+	swagger.Init(mainRouter)
 
 	server := &http.Server{
 		Addr:    fmt.Sprintf("%s:%s", os.Getenv("HTTP_URL"), os.Getenv("HTTP_PORT")),

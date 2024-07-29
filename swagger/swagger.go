@@ -12,7 +12,7 @@ var embeddedUi embed.FS
 
 func Init(mainRouter *router.MainRouter) {
 	sub, _ := fs.Sub(embeddedUi, "ui")
-	fs := http.FileServer(http.FS(sub))
+	fsHandler := http.FileServer(http.FS(sub))
 	
-	mainRouter.Handle("/doc", http.StripPrefix("/doc/", fs))
+	mainRouter.Handle("/doc", http.StripPrefix("/doc/", fsHandler))
 }

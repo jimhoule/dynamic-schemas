@@ -1,0 +1,44 @@
+openapi: 3.0.0
+info:
+  title: Schemas RESTful API
+  description: API for interacting with Schemas
+  version: 1.0.0
+servers:
+  - url: http://localhost:5000
+    description: Local server
+paths:
+  /schemas/{name}:
+    get:
+      summary: Gets a Schema by ID
+      description: Returns a found Schema object by ID
+      parameters:
+        - name: name
+          in: path
+          schema:
+            type: string
+          required: true
+          description: Name of the Schema to retrieve
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Schema'
+        500:
+          description: Internal Server Error
+          content: {}
+components:
+  schemas:
+    Schema:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the Schema
+        name:
+          type: string
+          description: Name of the Schema

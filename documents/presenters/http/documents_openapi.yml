@@ -1,0 +1,128 @@
+openapi: 3.0.0
+info:
+  title: Documents RESTful API
+  description: API for interacting with Documents
+  version: 1.0.0
+servers:
+  - url: http://localhost:5000
+    description: Local server
+paths:
+  /documents/{schemaName}/{collectionName}:
+    get:
+      summary: Gets a list of Documents
+      description: Returns a list Document object
+      parameters:
+        - name: schemaName
+          in: path
+          schema:
+            type: string
+          required: true
+          description: Name of Schema to which the Collection the Document belongs
+
+        - name: collectionName
+          in: path
+          schema:
+            type: string
+          required: true
+          description: Name of collection to which the Document belongs
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Documents'
+        500:
+          description: Internal Server Error
+          content: {}
+
+  /documents/{schemaName}/{collectionName}/{key}:
+    get:
+      summary: Gets a Document by Key
+      description: Returns a found Document object by Key
+      parameters:
+        - name: schemaName
+          in: path
+          schema:
+            type: string
+          required: true
+          description: Name of Schema to which the Collection the Document belongs
+
+        - name: collectionName
+          in: path
+          schema:
+            type: string
+          required: true
+          description: Name of collection to which the Document belongs
+
+        - name: key
+          in: path
+          schema:
+            type: string
+          required: true
+          description: Key of Document to retrieve
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Document'
+        500:
+          description: Internal Server Error
+          content: {}
+
+  /documents:
+    post:
+      summary: Creates a Document
+      description: Returns a newly created Document object
+      parameters:
+        - in: body
+          name: schemaName
+          schema:
+            type: string
+          required: true
+          description: Name of Schema to which the Collection the Document belongs
+
+        - in: body
+          name: collectionName
+          schema:
+            type: string
+          required: true
+          description: Name of Collection to which the Document belongs
+
+        - in: body
+          name: body
+          schema:
+            type: object
+          required: true
+          description: Body of the Document
+      responses:
+        201:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Document'
+        500:
+          description: Internal Server Error
+          content: {}
+components:
+  schemas:
+    Document:
+      type: object
+      required:
+        - key
+        - body
+      properties:
+        key:
+          type: string
+          description: Unique identifier of the Document
+        body:
+          type: object
+          description: Body of the Document
+
+    Documents:
+      type: array
+      items:
+        $ref: '#/components/schemas/Document'

@@ -1,0 +1,153 @@
+openapi: 3.0.0
+info:
+  title: Collections RESTful API
+  description: API for interacting with Collections
+  version: 1.0.0
+servers:
+  - url: http://localhost:5000
+    description: Local server
+paths:
+  /collections/{schemaName}:
+    get:
+      summary: Gets a list of Collections
+      description: Returns a list Collection objects
+      parameters:
+        - name: schemaName
+          in: path
+          schema:
+            type: string
+          required: true
+          description: Name of Schema to which the Collection belongs
+
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Collections'
+        500:
+          description: Internal Server Error
+          content: {}
+
+  /collections/{schemaName}/{name}:
+    get:
+      summary: Gets a Collection by name
+      description: Returns a found Collection object by name
+      parameters:
+        - name: schemaName
+          in: path
+          schema:
+            type: string
+          required: true
+          description: Name of Schema to which the Collection belongs
+
+        - name: name
+          in: path
+          schema:
+            type: string
+          required: true
+          description: Name of collection
+
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Document'
+        500:
+          description: Internal Server Error
+          content: {}
+
+  /collections:
+    post:
+      summary: Creates a Collection
+      description: Returns a newly created Document object
+      parameters:
+        - in: body
+          name: schemaName
+          schema:
+            type: string
+          required: true
+          description: Name of Schema to which the Collection belongs
+
+        - in: body
+          name: name
+          schema:
+            type: string
+          required: true
+          description: Name of Collection
+
+        - in: body
+          name: createPropertyPayloads
+          schema:
+            type: array
+            items:
+              properties:
+                name:
+                  type: string
+                  description: Name of Property
+                type:
+                  type: string
+                  description: Type of Property
+                isRequired:
+                  type: boolean
+                  description: Marks a Property has required
+                itemType:
+                  type: string
+                  description: Type of each item if Property is of type array
+
+          required: true
+          description: Creation payloads of Properties
+      responses:
+        201:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Collection'
+        500:
+          description: Internal Server Error
+          content: {}
+components:
+  schemas:
+    Property:
+      type: object
+      required:
+        - name
+        - type
+        - isRequired
+        - itemType
+      properties:
+        name:
+          type: string
+          description: Name of Property
+        type:
+          type: string
+          description: Type of Property
+        isRequired:
+          type: boolean
+          description: Marks a Property has required
+        itemType:
+          type: string
+          description: Type of each item if Property is of type array
+
+    Collection:
+      type: object
+      required:
+        - name
+        - properties
+      properties:
+        name:
+          type: string
+          description: Name of Collection
+        properties:
+          type: array
+          items:
+            $ref: '#/components/schemas/Property'
+
+    Collections:
+      type: array
+      items:
+        $ref: '#/components/schemas/Collection'

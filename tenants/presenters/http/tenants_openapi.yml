@@ -1,0 +1,66 @@
+openapi: 3.0.0
+info:
+  title: Tenants RESTful API
+  description: API for interacting with Tenants
+  version: 1.0.0
+servers:
+  - url: http://localhost:5000
+    description: Local server
+paths:
+  /tenants/{id}:
+    get:
+      summary: Gets a Tenant by ID
+      description: Returns a found Tenant object by ID
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: ID of the Tenant to retrieve
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tenant'
+        500:
+          description: Internal Server Error
+          content: {}
+
+  /tenants:
+    post:
+      summary: Creates a Tenant
+      description: Returns a newly created Tenant object
+      parameters:
+        - name: name
+          in: body
+          schema:
+            type: string
+          required: true
+          description: Name of the Tenant to create
+      responses:
+        201:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tenant'
+        500:
+          description: Internal Server Error
+          content: {}
+components:
+  schemas:
+    Tenant:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the Tenant
+        name:
+          type: string
+          description: Name of the Tenant

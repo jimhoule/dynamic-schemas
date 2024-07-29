@@ -2,7 +2,6 @@ package repositories
 
 import (
 	"context"
-	"fmt"
 	"main/database"
 	"main/database/arango"
 	"main/schemas/domain/models"
@@ -22,7 +21,6 @@ func (asr *ArangodbSchemasRepository) GetByName(name string) (*models.Schema, er
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println(info.ID)
 
 	schema := &models.Schema{
 		Id:   info.ID,
